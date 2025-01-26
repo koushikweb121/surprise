@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Make You Smile</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(120deg, #ff7eb3, #ff758c, #ffb199);
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .input-container {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+
+    .quote {
+      position: absolute;
+      font-size: 1.5rem;
+      color: white;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fade-in 0.5s ease-in-out forwards, float-up 3s ease-in-out;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes float-up {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Click Anywhere for a Fun Quote!</h1>
+  <div class="input-container">
+    <input type="text" id="nameInput" placeholder="Write your name for a surprise...">
+  </div>
+  <audio id="sound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
+  
+  <script>
+    const stickers = ["🎉", "💖", "🌟", "🔥", "🎈", "🎊"];
+    const quotes = [
+      "🌟 You're the sparkle in my day, {name}!",
+      "✨ You make the world a brighter place, {name}!",
+      "😊 Your smile is my favorite thing, {name}!",
+      "❤️ {name}, you’re the reason I believe in love!",
+      "🎁 Every moment with you is a gift, {name}!",
+      "💡 You light up every room you enter, {name}!",
+      "🍀 I’m so lucky to have you in my life, {name}!",
+      "🌞 {name}, you’re my sunshine on a rainy day!",
+      "🪄 With you, everything feels magical, {name}!",
+      "🌌 {name}, you’re my favorite person in the whole universe!",
+      "🌞 A smile is happiness you’ll find right under your nose! 😊",
+      "🌸 Be the reason someone smiles today! 😃",
+      "🍪 You can’t make everyone happy… you’re not a cookie! 🍪",
+      "🌈 Happiness looks good on you—wear it more often! ✨",
+      "🎈 Throw kindness around like confetti! 🎉",
+      "🍉 You’re one in a melon! 🍉",
+      "🐱 You are paws-itively amazing! 🐾",
+      "🌟 The world is brighter with you in it! 💖",
+      "☕ Stay positive… or at least stay caffeinated! 😆",
+      "🍩 Donut worry, be happy! 🍩",
+      "🦄 Believe in yourself—you're magic! 🌟",
+      "💡 You light up every room you walk into! ✨",
+      "🚀 Keep shining, the universe is watching! 🌌",
+      "🦋 You’re like a butterfly—so rare and beautiful! 💙",
+      "🎵 Sing like no one’s listening, dance like no one’s watching! 💃",
+      "🐶 You’re pawsome just the way you are! 🐕",
+      "🍫 Chocolate makes everything better… so do you! ❤️",
+      "🌼 You are a wildflower in a world of roses! 🌸",
+      "🏆 You’re already winning at life by just being you! 🎯",
+      "💛 Smiles are contagious—spread yours today! 😊"
+    ];
+
+    document.body.addEventListener('click', function (event) {
+      const sound = document.getElementById('sound');
+      sound.currentTime = 0;
+      sound.play();
+      
+      const name = document.getElementById('nameInput').value || "Friend";
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)].replace("{name}", name);
+      
+      const quoteElement = document.createElement('div');
+      quoteElement.className = 'quote';
+      quoteElement.innerText = randomQuote;
+
+      const x = event.clientX;
+      const y = event.clientY;
+      quoteElement.style.left = `${x}px`;
+      quoteElement.style.top = `${y}px`;
+
+      document.body.appendChild(quoteElement);
+      
+      setTimeout(() => {
+        quoteElement.remove();
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
