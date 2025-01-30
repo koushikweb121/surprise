@@ -1,159 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Make You Smile</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: linear-gradient(120deg, #ff7eb3, #ff758c, #ffb199);
-      font-family: 'Arial', sans-serif;
-      overflow: hidden;
-      text-align: center;
-      position: relative;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumaiya & Rimon ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --secondary-color: #ff94c2;
+            --accent-color: #ffd1dc;
+            --text-color: #4a4a4a;
+        }
 
-    h1 {
-      color: white;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-      animation: bounce 1.5s infinite;
-    }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding-top: 120px;
+            background: linear-gradient(135deg, #fff0f7 0%, #ffe6f2 100%);
+            color: var(--text-color);
+        }
 
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-color);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+            z-index: 1000;
+        }
 
-    .input-container {
-      margin-bottom: 20px;
-    }
+        .header h1 {
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
 
-    input {
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      text-align: center;
-      outline: none;
-      transition: 0.3s ease;
-    }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
 
-    input:focus {
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    }
+        .user-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(255,105,180,0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
 
-    .quote {
-      position: absolute;
-      font-size: 1.5rem;
-      color: white;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      animation: fade-in 0.5s ease-in-out forwards, float-up 3s ease-in-out;
-    }
+        .user-section:hover {
+            transform: translateY(-5px);
+        }
 
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            resize: vertical;
+            margin-bottom: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+        }
 
-    @keyframes float-up {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(-100px);
-        opacity: 0;
-      }
-    }
-  </style>
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255,105,180,0.2);
+            outline: none;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: #ff1493;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+        }
+
+        .post {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .comment {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fff8fb;
+            border-radius: 10px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .heart-animation {
+            position: fixed;
+            pointer-events: none;
+            animation: float 3s ease-out forwards;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+
+        .memory-counter {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .love-notes {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .note {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .reactions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .reaction-btn {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .reaction-btn:hover {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Click Anywhere for a Fun Quote!</h1>
-  <div class="input-container">
-    <input type="text" id="nameInput" placeholder="Write your name for a surprise...">
-  </div>
-  <audio id="sound" src="https://www.fesliyanstudios.com/play-mp3/387" preload="auto"></audio>
-  
-  <script>
-    const stickers = ["🎉", "💖", "🌟", "🔥", "🎈", "🎊"];
-    const quotes = [
-      "🌟 You're the sparkle in my day, {name}!",
-      "✨ You make the world a brighter place, {name}!",
-      "😊 Your smile is my favorite thing, {name}!",
-      "❤️ {name}, you’re the reason I believe in love!",
-      "🎁 Every moment with you is a gift, {name}!",
-      "💡 You light up every room you enter, {name}!",
-      "🍀 I’m so lucky to have you in my life, {name}!",
-      "🌞 {name}, you’re my sunshine on a rainy day!",
-      "🪄 With you, everything feels magical, {name}!",
-      "🌌 {name}, you’re my favorite person in the whole universe!",
-      "🌞 A smile is happiness you’ll find right under your nose! 😊",
-      "🌸 Be the reason someone smiles today! 😃",
-      "🍪 You can’t make everyone happy… you’re not a cookie! 🍪",
-      "🌈 Happiness looks good on you—wear it more often! ✨",
-      "🎈 Throw kindness around like confetti! 🎉",
-      "🍉 You’re one in a melon! 🍉",
-      "🐱 You are paws-itively amazing! 🐾",
-      "🌟 The world is brighter with you in it! 💖",
-      "☕ Stay positive… or at least stay caffeinated! 😆",
-      "🍩 Donut worry, be happy! 🍩",
-      "🦄 Believe in yourself—you're magic! 🌟",
-      "💡 You light up every room you walk into! ✨",
-      "🚀 Keep shining, the universe is watching! 🌌",
-      "🦋 You’re like a butterfly—so rare and beautiful! 💙",
-      "🎵 Sing like no one’s listening, dance like no one’s watching! 💃",
-      "🐶 You’re pawsome just the way you are! 🐕",
-      "🍫 Chocolate makes everything better… so do you! ❤️",
-      "🌼 You are a wildflower in a world of roses! 🌸",
-      "🏆 You’re already winning at life by just being you! 🎯",
-      "💛 Smiles are contagious—spread yours today! 😊"
-    ];
+    <div class="header">
+        <h1>Sumaiya ❤️ Rimon</h1>
+        <div class="memory-counter">
+            <i class="fas fa-heart"></i>
+            <span id="memoryCount">0 Memories</span>
+        </div>
+    </div>
 
-    document.body.addEventListener('click', function (event) {
-      const sound = document.getElementById('sound');
-      sound.currentTime = 0;
-      sound.play();
-      
-      const name = document.getElementById('nameInput').value || "Friend";
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)].replace("{name}", name);
-      
-      const quoteElement = document.createElement('div');
-      quoteElement.className = 'quote';
-      quoteElement.innerText = randomQuote;
+    <div class="container">
+        <!-- Sumaiya's Section -->
+        <div class="user-section">
+            <h2><i class="fas fa-female"></i> Sumaiya ✍</h2>
+            <textarea id="sumaiya-post" placeholder="Pen your heartfelt thought... 🌸" rows="3"></textarea>
+            <button onclick="addPost('sumaiya')"><i class="fas fa-feather"></i> Share Thought</button>
+            <div id="sumaiya-posts" class="posts"></div>
+        </div>
 
-      const x = event.clientX;
-      const y = event.clientY;
-      quoteElement.style.left = `${x}px`;
-      quoteElement.style.top = `${y}px`;
+        <!-- Rimon's Section -->
+        <div class="user-section">
+            <h2><i class="fas fa-male"></i> Rimon ✍</h2>
+            <textarea id="Rimon-post" placeholder="Write your loving message... 💌" rows="3"></textarea>
+            <button onclick="addPost('Rimon')"><i class="fas fa-feather"></i> Share Thought</button>
+            <div id="Rimon-posts" class="posts"></div>
+        </div>
+    </div>
 
-      document.body.appendChild(quoteElement);
-      
-      setTimeout(() => {
-        quoteElement.remove();
-      }, 3000);
-    });
-  </script>
+    <div class="love-notes" id="loveNotes"></div>
+
+    <script>
+        let memoryCount = 0;
+        const reactions = ['❤️', '😍', '🥰', '😘', '💖', '🌹'];
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart-animation';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function updateMemoryCounter() {
+            document.getElementById('memoryCount').textContent = `${memoryCount} Sweet Memories`;
+        }
+
+        function addPost(user) {
+            createHeart();
+            const postText = document.getElementById(`${user}-post`).value;
+            const timestamp = new Date().toLocaleString();
+
+            if (postText) {
+                memoryCount++;
+                updateMemoryCounter();
+
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+                postDiv.innerHTML = `
+                    <div class="thought">💖 ${postText}</div>
+                    <div class="timestamp">📅 ${timestamp}</div>
+                    <div class="reactions" id="${user}-reactions-${memoryCount}"></div>
+                    <div class="comments" id="${user}-comments-${memoryCount}"></div>
+                    <div class="comment-input">
+                        <input type="text" placeholder="Add a sweet comment... 💬">
+                        <button onclick="addComment(this, '${user}-comments-${memoryCount}')">
+                            <i class="fas fa-comment-dots"></i> Comment
+                        </button>
+                    </div>
+                `;
+
+                // Add reaction buttons
+                reactions.forEach(emoji => {
+                    const reactionBtn = document.createElement('span');
+                    reactionBtn.className = 'reaction-btn';
+                    reactionBtn.textContent = emoji;
+                    reactionBtn.onclick = () => addReaction('${user}-reactions-${memoryCount}', emoji);
+                    postDiv.querySelector('.reactions').appendChild(reactionBtn);
+                });
+
+                document.getElementById(`${user}-posts`).prepend(postDiv);
+                document.getElementById(`${user}-post`).value = '';
+                createConfetti();
+                showLoveNote(`${user} shared a new thought! 💌`);
+            }
+        }
+
+        function addComment(button, targetId) {
+            const commentInput = button.previousElementSibling;
+            const commentText = commentInput.value.trim();
+            if (commentText) {
+                memoryCount++;
+                updateMemoryCounter();
+                
+                const timestamp = new Date().toLocaleString();
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerHTML = `
+                    💬 ${commentText}
+                    <div class="timestamp">📅 ${timestamp}</div>
+                `;
+                
+                document.getElementById(targetId).appendChild(commentDiv);
+                commentInput.value = '';
+                createConfetti();
+                showLoveNote('New comment added! 💞');
+            }
+        }
+
+        function addReaction(targetId, emoji) {
+            const target = document.getElementById(targetId);
+            const reaction = document.createElement('span');
+            reaction.className = 'reaction-btn';
+            reaction.textContent = emoji;
+            reaction.style.animation = 'pop 0.3s ease';
+            target.appendChild(reaction);
+        }
+
+        function showLoveNote(text) {
+            const note = document.createElement('div');
+            note.className = 'note';
+            note.textContent = text;
+            document.getElementById('loveNotes').appendChild(note);
+            setTimeout(() => note.remove(), 3000);
+        }
+
+        function createConfetti() {
+            for(let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'heart-animation';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.textContent = ['🎉', '💖', '✨', '🌸', '💫'][Math.floor(Math.random()*5)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+    </script>
 </body>
 </html>
