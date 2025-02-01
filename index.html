@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Your existing CSS styles remain unchanged */
         :root {
             --primary-color: #ff69b4;
             --secondary-color: #ff94c2;
@@ -34,8 +33,149 @@
             z-index: 1000;
         }
 
-        /* ... (keep all your existing CSS styles exactly as they were) ... */
-        
+        .header h1 {
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .user-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(255,105,180,0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .user-section:hover {
+            transform: translateY(-5px);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            resize: vertical;
+            margin-bottom: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255,105,180,0.2);
+            outline: none;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: #ff1493;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+        }
+
+        .post {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .comment {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fff8fb;
+            border-radius: 10px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .timestamp {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .action-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none;
+            gap: 8px;
+        }
+
+        .post:hover .action-buttons,
+        .comment:hover .action-buttons {
+            display: flex;
+        }
+
+        .edit-btn, .delete-btn {
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            color: #ff8c00;
+        }
+
+        .delete-btn:hover {
+            color: #ff0000;
+        }
+
+        .edit-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -92,39 +232,66 @@ thats all about me and my journy i made it.  </h5>
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Real-time Post Loader
-        function loadPosts() {
-            db.collection("posts").onSnapshot((snapshot) => {
-                // Clear existing posts
+        // Real-time Posts and Comments
+        function loadData() {
+            // Load posts
+            db.collection("posts").onSnapshot((postSnapshot) => {
                 document.getElementById("sumaiya-posts").innerHTML = "";
                 document.getElementById("Rimon-posts").innerHTML = "";
+                
+                postSnapshot.forEach((postDoc) => {
+                    const post = postDoc.data();
+                    renderPost(post, postDoc.id);
+                });
+            });
 
-                // Add all posts
-                snapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postDiv = document.createElement("div");
-                    postDiv.className = "post";
-                    postDiv.innerHTML = `
-                        <div class="action-buttons">
-                            <i class="fas fa-edit edit-btn" onclick="startEdit('${doc.id}')"></i>
-                            <i class="fas fa-trash delete-btn" onclick="deletePost('${doc.id}')"></i>
-                        </div>
-                        <div class="thought">💖 ${post.text}</div>
-                        <div class="timestamp">📅 ${post.timestamp}</div>
-                        <div class="comments" id="comments-${doc.id}"></div>
-                        <div class="comment-input">
-                            <input type="text" placeholder="Add a sweet comment... 💬">
-                            <button onclick="addComment(this, '${doc.id}')">
-                                <i class="fas fa-comment-dots"></i> Comment
-                            </button>
-                        </div>
-                    `;
-                    document.getElementById(`${post.user}-posts`).appendChild(postDiv);
+            // Load comments
+            db.collection("comments").onSnapshot((commentSnapshot) => {
+                commentSnapshot.forEach((commentDoc) => {
+                    const comment = commentDoc.data();
+                    renderComment(comment, commentDoc.id);
                 });
             });
         }
 
-        // Add Post Function
+        // Render Post (Same as original)
+        function renderPost(post, postId) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.innerHTML = `
+                <div class="action-buttons">
+                    <i class="fas fa-edit edit-btn" onclick="startEdit('${postId}')"></i>
+                    <i class="fas fa-trash delete-btn" onclick="deletePost('${post.user}', '${postId}')"></i>
+                </div>
+                <div class="thought" id="${postId}">💖 ${post.text}</div>
+                <div class="timestamp">📅 ${post.timestamp}</div>
+                <div class="comments" id="comments-${postId}"></div>
+                <div class="comment-input">
+                    <input type="text" placeholder="Add a sweet comment... 💬">
+                    <button onclick="addComment(this, '${postId}')">
+                        <i class="fas fa-comment-dots"></i> Comment
+                    </button>
+                </div>
+            `;
+            document.getElementById(`${post.user}-posts`).appendChild(postDiv);
+        }
+
+        // Render Comment (Same as original)
+        function renderComment(comment, commentId) {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'comment';
+            commentDiv.innerHTML = `
+                <div class="action-buttons">
+                    <i class="fas fa-edit edit-btn" onclick="startEdit('${commentId}')"></i>
+                    <i class="fas fa-trash delete-btn" onclick="deleteComment('${commentId}', '${comment.postId}')"></i>
+                </div>
+                <span id="${commentId}">💬 ${comment.text}</span>
+                <div class="timestamp">📅 ${comment.timestamp}</div>
+            `;
+            document.getElementById(`comments-${comment.postId}`).appendChild(commentDiv);
+        }
+
+        // Add Post (Same as original but with Firebase)
         async function addPost(user) {
             const postText = document.getElementById(`${user}-post`).value;
             if (postText) {
@@ -134,11 +301,11 @@ thats all about me and my journy i made it.  </h5>
                     text: postText,
                     timestamp: timestamp
                 });
-                document.getElementById(`${user}-post`).value = "";
+                document.getElementById(`${user}-post`).value = '';
             }
         }
 
-        // Add Comment Function
+        // Add Comment (Same as original but with Firebase)
         async function addComment(button, postId) {
             const commentText = button.previousElementSibling.value;
             if (commentText) {
@@ -148,19 +315,26 @@ thats all about me and my journy i made it.  </h5>
                     text: commentText,
                     timestamp: timestamp
                 });
-                button.previousElementSibling.value = "";
+                button.previousElementSibling.value = '';
             }
         }
 
-        // Delete Post Function
-        async function deletePost(postId) {
-            if (confirm("Are you sure you want to delete this post?")) {
+        // Delete Post (Same as original but with Firebase)
+        async function deletePost(user, postId) {
+            if (confirm('Are you sure?')) {
                 await db.collection("posts").doc(postId).delete();
             }
         }
 
-        // Initial Load
-        window.onload = loadPosts;
+        // Delete Comment (Same as original but with Firebase)
+        async function deleteComment(commentId) {
+            if (confirm('Are you sure?')) {
+                await db.collection("comments").doc(commentId).delete();
+            }
+        }
+
+        // Start (Same as original)
+        window.onload = loadData;
     </script>
 </body>
 </html>
