@@ -188,7 +188,7 @@ i dont want to think like that bcs she is my family member . i will restart agai
 i am ready to throw her previous  words. if she do the same again . then i will say directly to her . thats the pstv i want to follow
  and thats the ngtv u push me to follow . now u say me what to do. also i will say after i get up and finally if i  survive then i  will
 look back and will find everyones impact on my life . if dont find anything pstv from ur side remember no one will be benifited from me.
-thats all about me and my journy i made it.  </h5>
+thats all about me and my journy i made it.  <h5>
         <div class="memory-counter">
             <i class="fas fa-heart"></i>
             <span id="memoryCount">0 Memories</span>
@@ -213,11 +213,10 @@ thats all about me and my journy i made it.  </h5>
         </div>
     </div>
 
-    <!-- Firebase Integration -->
+    <!-- Add Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
     <script>
-        // Your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD4QLTW79IGTPWO8HygguXu50Lc0e-u0M0",
             authDomain: "sumaiya-rimon.firebaseapp.com",
@@ -228,113 +227,98 @@ thats all about me and my journy i made it.  </h5>
             measurementId: "G-NNQLB5J0YB"
         };
 
-        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Real-time Posts and Comments
-        function loadData() {
-            // Load posts
-            db.collection("posts").onSnapshot((postSnapshot) => {
-                document.getElementById("sumaiya-posts").innerHTML = "";
-                document.getElementById("Rimon-posts").innerHTML = "";
-                
-                postSnapshot.forEach((postDoc) => {
-                    const post = postDoc.data();
-                    renderPost(post, postDoc.id);
-                });
-            });
-
-            // Load comments
-            db.collection("comments").onSnapshot((commentSnapshot) => {
-                commentSnapshot.forEach((commentDoc) => {
-                    const comment = commentDoc.data();
-                    renderComment(comment, commentDoc.id);
-                });
-            });
-        }
-
-        // Render Post (Same as original)
-        function renderPost(post, postId) {
-            const postDiv = document.createElement('div');
-            postDiv.className = 'post';
-            postDiv.innerHTML = `
-                <div class="action-buttons">
-                    <i class="fas fa-edit edit-btn" onclick="startEdit('${postId}')"></i>
-                    <i class="fas fa-trash delete-btn" onclick="deletePost('${post.user}', '${postId}')"></i>
-                </div>
-                <div class="thought" id="${postId}">💖 ${post.text}</div>
-                <div class="timestamp">📅 ${post.timestamp}</div>
-                <div class="comments" id="comments-${postId}"></div>
-                <div class="comment-input">
-                    <input type="text" placeholder="Add a sweet comment... 💬">
-                    <button onclick="addComment(this, '${postId}')">
-                        <i class="fas fa-comment-dots"></i> Comment
-                    </button>
-                </div>
-            `;
-            document.getElementById(`${post.user}-posts`).appendChild(postDiv);
-        }
-
-        // Render Comment (Same as original)
-        function renderComment(comment, commentId) {
-            const commentDiv = document.createElement('div');
-            commentDiv.className = 'comment';
-            commentDiv.innerHTML = `
-                <div class="action-buttons">
-                    <i class="fas fa-edit edit-btn" onclick="startEdit('${commentId}')"></i>
-                    <i class="fas fa-trash delete-btn" onclick="deleteComment('${commentId}', '${comment.postId}')"></i>
-                </div>
-                <span id="${commentId}">💬 ${comment.text}</span>
-                <div class="timestamp">📅 ${comment.timestamp}</div>
-            `;
-            document.getElementById(`comments-${comment.postId}`).appendChild(commentDiv);
-        }
-
-        // Add Post (Same as original but with Firebase)
+        // Fixed Post Creation
         async function addPost(user) {
             const postText = document.getElementById(`${user}-post`).value;
             if (postText) {
-                const timestamp = new Date().toLocaleString();
-                await db.collection("posts").add({
-                    user: user,
-                    text: postText,
-                    timestamp: timestamp
-                });
-                document.getElementById(`${user}-post`).value = '';
+                try {
+                    await db.collection("posts").add({
+                        user: user,
+                        text: postText,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    document.getElementById(`${user}-post`).value = "";
+                } catch (error) {
+                    console.error("Error adding post:", error);
+                }
             }
         }
 
-        // Add Comment (Same as original but with Firebase)
+        // Fixed Comment System
         async function addComment(button, postId) {
-            const commentText = button.previousElementSibling.value;
+            const commentInput = button.previousElementSibling;
+            const commentText = commentInput.value;
             if (commentText) {
-                const timestamp = new Date().toLocaleString();
-                await db.collection("comments").add({
-                    postId: postId,
-                    text: commentText,
-                    timestamp: timestamp
-                });
-                button.previousElementSibling.value = '';
+                try {
+                    await db.collection("comments").add({
+                        postId: postId,
+                        text: commentText,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    commentInput.value = "";
+                } catch (error) {
+                    console.error("Error adding comment:", error);
+                }
             }
         }
 
-        // Delete Post (Same as original but with Firebase)
-        async function deletePost(user, postId) {
-            if (confirm('Are you sure?')) {
-                await db.collection("posts").doc(postId).delete();
-            }
+        // Real-time Post Loader
+        db.collection("posts").onSnapshot((snapshot) => {
+            document.getElementById("sumaiya-posts").innerHTML = "";
+            document.getElementById("Rimon-posts").innerHTML = "";
+
+            snapshot.forEach((doc) => {
+                const post = doc.data();
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+                postDiv.innerHTML = `
+                    <div class="action-buttons">
+                        <i class="fas fa-trash delete-btn" onclick="deletePost('${doc.id}')"></i>
+                    </div>
+                    <div class="thought">💖 ${post.text}</div>
+                    <div class="timestamp">📅 ${post.timestamp}</div>
+                    <div class="comments" id="comments-${doc.id}"></div>
+                    <div class="comment-input">
+                        <input type="text" placeholder="Add a sweet comment... 💬">
+                        <button onclick="addComment(this, '${doc.id}')">
+                            <i class="fas fa-comment-dots"></i> Comment
+                        </button>
+                    </div>
+                `;
+                document.getElementById(`${post.user}-posts`).appendChild(postDiv);
+            });
+        });
+
+        // Real-time Comment Loader
+        db.collection("comments").onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    const comment = change.doc.data();
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.innerHTML = `
+                        <div class="action-buttons">
+                            <i class="fas fa-trash delete-btn" onclick="deleteComment('${change.doc.id}')"></i>
+                        </div>
+                        <span>💬 ${comment.text}</span>
+                        <div class="timestamp">📅 ${comment.timestamp}</div>
+                    `;
+                    document.getElementById(`comments-${comment.postId}`).appendChild(commentDiv);
+                }
+            });
+        });
+
+        // Delete Functions
+        async function deletePost(postId) {
+            if (confirm("Delete this post?")) await db.collection("posts").doc(postId).delete();
         }
 
-        // Delete Comment (Same as original but with Firebase)
         async function deleteComment(commentId) {
-            if (confirm('Are you sure?')) {
-                await db.collection("comments").doc(commentId).delete();
-            }
+            if (confirm("Delete this comment?")) await db.collection("comments").doc(commentId).delete();
         }
-
-        // Start (Same as original)
-        window.onload = loadData;
     </script>
 </body>
 </html>
